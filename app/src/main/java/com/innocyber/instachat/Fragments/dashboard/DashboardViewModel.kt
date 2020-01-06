@@ -1,4 +1,4 @@
-package com.innocyber.instachat.ui.dashboard
+package com.innocyber.instachat.Fragments.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
