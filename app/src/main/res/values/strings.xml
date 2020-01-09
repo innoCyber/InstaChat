@@ -15,4 +15,5 @@
     <string name="posts">Posts</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="notifications">Notifications</string>
+    <string name="change_image">Change Image</string>
 </resources>
