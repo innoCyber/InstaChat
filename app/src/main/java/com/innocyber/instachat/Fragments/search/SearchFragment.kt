@@ -16,7 +16,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.innocyber.instachat.Adapter.UserAdapter
 import com.innocyber.instachat.Model.User
-
 import com.innocyber.instachat.R
 import kotlinx.android.synthetic.main.fragment_search.view.*
 
@@ -42,7 +41,7 @@ class SearchFragment : Fragment() {
         recyclerView?.layoutManager = LinearLayoutManager(context)
 
         mUser = ArrayList()
-        userAdapter = context?.let { UserAdapter(it,mUser as ArrayList<User>,true) }
+        userAdapter = context?.let { UserAdapter(it, mUser as ArrayList<User>, true) }
         recyclerView?.adapter = userAdapter
 
         view.search_edittext.addTextChangedListener(object : TextWatcher {
@@ -54,12 +53,12 @@ class SearchFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (view.search_edittext.text.toString() == ""){
+                if (view.search_edittext.text.toString() == "") {
 
-                }else{
+                } else {
                     recyclerView?.visibility = View.VISIBLE
                     retrieveUsers()
-                    searchUser()
+                    searchUser(p0.toString().toLowerCase())
                 }
             }
 
@@ -68,23 +67,53 @@ class SearchFragment : Fragment() {
         return view
     }
 
+    private fun searchUser(input: String) {
+        val query = FirebaseDatabase.getInstance().getReference().child("Users")
+            //search users by fullname
+            .orderByChild("fullname")
+            .startAt(input).endAt(input + "\uf8ff")
+
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                mUser?.clear()
 
 
-    private fun retrieveUsers(){
+                for (snapshot in dataSnapshot.children) {
+                    val user = snapshot.getValue(User::class.java)
+                    if (user != null) {
+                        mUser?.add(user)
+                    }
+                }
+
+                userAdapter?.notifyDataSetChanged()
+
+
+            }
+
+        })
+
+    }
+
+
+    private fun retrieveUsers() {
         val userRef = FirebaseDatabase.getInstance().getReference().child("Users")
-        userRef.addValueEventListener(object : ValueEventListener{
+        userRef.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
 
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
-                if (view.search_edittext.text.toString() == ""){
+                if (view?.search_edittext?.text.toString() == "") {
                     mUser?.clear()
 
-                    for (snapshot in dataSnapshot.children){
+                    for (snapshot in dataSnapshot.children) {
                         val user = snapshot.getValue(User::class.java)
-                        if (user!=null){
+                        if (user != null) {
                             mUser?.add(user)
                         }
                     }
@@ -97,6 +126,5 @@ class SearchFragment : Fragment() {
 
         })
     }
-
 
 }

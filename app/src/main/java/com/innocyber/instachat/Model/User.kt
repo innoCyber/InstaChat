@@ -8,13 +8,15 @@ class User {
     private var image: String = ""
     private var uid: String = ""
 
-    constructor(username: String, fullname: String, bio: String, image: String, uid: String) {
+     constructor(username: String, fullname: String, bio: String, image: String, uid: String) {
         this.username = username
         this.fullname = fullname
         this.bio = bio
         this.image = image
         this.uid = uid
     }
+
+    constructor()
 
     fun getUsername():String{
         return username
