@@ -53,5 +53,17 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.squareup.picasso:picasso-provider:3.0.0-SNAPSHOT'
 
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == "androidx") {
+                if (!requested.name.startsWith("multidex")) {
+                    details.useVersion "${targetSdk}.+"
+                }
+            }
+        }
+    }
+
+
 
 }

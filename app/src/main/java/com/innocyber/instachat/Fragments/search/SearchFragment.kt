@@ -81,7 +81,6 @@ class SearchFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 mUser?.clear()
 
-
                 for (snapshot in dataSnapshot.children) {
                     val user = snapshot.getValue(User::class.java)
                     if (user != null) {
